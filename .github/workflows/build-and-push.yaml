@@ -20,10 +20,14 @@ jobs:
       - name: Login to DockerHub
         run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
+      - name: Determine Version
+        run: |
+          # Count the number of commits in the repository to generate a patch number
+          PATCH_VERSION=$(git rev-list --count HEAD)
+          IMAGE_TAG="1.0.$PATCH_VERSION"
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+
       - name: Build and push image
         run: |
-          IMAGE_TAG=$(date +%Y%m%d%H%M%S) # or use git SHA or semantic version
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/my-webapp:${IMAGE_TAG} .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-webapp:${IMAGE_TAG}
-          
-          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
