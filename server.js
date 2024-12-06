@@ -4,7 +4,7 @@ const app = express();
 const port = 3000;
 
 app.get('/', (req, res) => {
-  res.send('Hello from Ansibler: test-argocd-image-updater');
+  res.send('Hello from Ansibler: test-argocd-image-updaterr');
 });
 
 app.listen(port, () => {
